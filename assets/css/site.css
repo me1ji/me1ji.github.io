@@ -936,8 +936,18 @@ footer {
 
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; gap: 24px; }
-  .header-top { flex-direction: column; align-items: flex-start; }
-  .nav-links { overflow-x: auto; }
-  .cards-grid { grid-template-columns: 1fr; }
+  .header-top { flex-direction: column; align-items: stretch; gap: 18px; }
+  .nav-links { overflow-x: auto; padding-bottom: 8px; justify-content: flex-start; }
+  .nav-links a { flex: 0 0 auto; padding: 10px 14px 12px; }
+  .hero p { max-width: none; font-size: 15px; }
+  .hero-tags { gap: 6px; margin-top: 18px; }
+  .folder-card { padding: 22px; }
+  .folder-card dl { grid-template-columns: 1fr; gap: 10px 0; }
+  .section-head { gap: 12px; }
+  .section-head h2 { font-size: 24px; }
+  .cards-grid { grid-template-columns: 1fr; gap: 18px; }
+  .header-inner,
+  .main-shell,
+  .footer-shell { padding: 0 5vw; }
   .contact-wrap { grid-template-columns: 1fr; }
 }
