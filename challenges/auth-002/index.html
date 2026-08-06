@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+       Head Hunt — Meiji 
+    </title>
+    <link rel="stylesheet" href="/assets/css/site.css" />
+  </head>
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="eyebrow">Investigation Dossier</span>
+        <span class="name">MEIJI // CASE FILES</span>
+      </div>
+      <span class="page-tag">
+        
+          Challenges
+        
+      </span>
+    </div>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a  href="/">Home</a>
+      <a  href="/projects">Projects</a>
+      <a class="active" href="/challenges">Challenges</a>
+      <a  href="/writeups">Writeups</a>
+      <a  href="/certificates">Certificates</a>
+      <a  href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+    <main>
+      <div class="main-shell"><div class="detail-layout challenge-detail-layout">
+  <article class="detail-page challenge-detail-page">
+    <span class="meta">OSINT-xxxx-002</span>
+    <h1>Head Hunt</h1>
+    
+    <p class="summary" id="overview">Author: Meiji · Category: OSINT · Difficulty: Easy</p>
+    
+    <br />
+    <h2 id="challenge-description">Challenge Description</h2>
+<p>It seems like the last challenge was pretty easy for you great job detective now I’ve scattered the flag across my digital footprint in the web, can you conduct a full Head Hunt to piece together their complete flag.</p>
+
+<p>Try retracting your steps by looking into a professional network, word on the street is I’m  polishing up my resume for recruiters.</p>
+
+<p>You’ll also want to track my training habits. I spend a lot of time deploying virtual machines and conquering rooms; see if you can try to find what they are hacking on.</p>
+
+<p>Finally, you know that I love free stuff and open-source. I’m currently working on a important project pushed in a special place. You might need to inspect the colors closely to get the whole profile.</p>
+
+<p>Good luck, agent. Leave no stone unturned, and remember that sometimes the smallest details right in front of you hold the answers you seek. 🕵️‍♂️</p>
+
+<p>Flag Format: PwnStar{}</p>
+
+<h3 id="files">Files</h3>
+<ul>
+  <li><a href="/assets/images/challenges/headhunt/Head_Hunt.txt">HeadHunt.txt</a></li>
+</ul>
+  
+<div class="flag-box">
+  <input
+    id="flag-input"
+    type="text"
+    placeholder="flag{...}"
+    autocomplete="off"
+    spellcheck="false"
+  />
+  <button id="flag-submit">Submit</button>
+</div>
+<p id="flag-feedback" class="flag-feedback"></p>
+<p class="flag-note"></p>
+<script>
+  (function () {
+    const flagTarget = "c63ed698a52501cb97ef529b3eb231bf5a8d9f6fbd3b3df3df5f069454410ad1";
+    async function checkFlag() {
+      const input = document.getElementById("flag-input");
+      const feedback = document.getElementById("flag-feedback");
+      const value = ((input && input.value) || "").trim();
+      if (!value) return;
+      const enc = new TextEncoder().encode(value);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      const hex = Array.from(new Uint8Array(buf))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+      if (hex === flagTarget) {
+        feedback.textContent = "Correct!";
+        feedback.className = "flag-feedback correct";
+      } else {
+        feedback.textContent = "Incorrect flag, try again.";
+        feedback.className = "flag-feedback incorrect";
+      }
+    }
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "flag-submit") checkFlag();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && document.getElementById("flag-input"))
+        checkFlag();
+    });
+  })();
+</script>
+
+ 
+  </article>
+</div>
+</div>
+    </main>
+
+    <footer>
+  <div class="footer-shell">© 2026 Meiji - All rights reserved.</div>
+</footer>
+
+    <script
+      src="/assets/js/site.js?v=20260720"
+      data-page="challenges"
+      data-root=""
+    ></script>
+  </body>
+</html>

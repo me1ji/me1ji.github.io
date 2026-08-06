@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+       Home SOC Lab: Active Directory, Wazuh — Meiji 
+    </title>
+    <link rel="stylesheet" href="/assets/css/site.css" />
+  </head>
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="eyebrow">Investigation Dossier</span>
+        <span class="name">MEIJI // CASE FILES</span>
+      </div>
+      <span class="page-tag">
+        
+          Projects
+        
+      </span>
+    </div>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a  href="/">Home</a>
+      <a class="active" href="/projects">Projects</a>
+      <a  href="/challenges">Challenges</a>
+      <a  href="/writeups">Writeups</a>
+      <a  href="/certificates">Certificates</a>
+      <a  href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+    <main>
+      <div class="main-shell"><div class="detail-layout">
+  
+  <div class="contents-card">
+    <div class="contents-head">
+      <span class="contents-label">Contents</span>
+    </div>
+    <div class="contents-list">
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+           
+      </ul>
+    </div>
+  </div>
+  
+
+  <article class="detail-page" data-collection="projects">
+    <span class="meta">SEC-2026-002</span>
+    <h1>Home SOC Lab: Active Directory, Wazuh</h1>
+     <p>A session-based home SOC environment built entirely on a portable external drive, combining a working Active Directory domain, a Wazuh SIEM deployment, and a dedicated attacker VM designed around a hard 12GB host RAM budget rather than always-on infrastructure.</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>This lab was built to get hands-on with the full SOC workflow: standing up monitored infrastructure, deploying a SIEM, enrolling endpoints, and eventually generating and detecting real attack traffic. Unlike a typical always-on home lab, every VM here was budgeted against a strict 12GB RAM ceiling, which meant the entire build had to be planned around <em>sessions</em> — attack sessions, log-review sessions, domain-admin sessions rather than running everything simultaneously. (I mean if you want to give me a better laptop I’m open to it)</p>
+
+<h2 id="objectives">Objectives</h2>
+
+<ul>
+  <li>Stand up a functioning Active Directory domain (<code class="language-plaintext highlighter-rouge">soclab.local</code>) with a domain controller and a domain-joined endpoint.</li>
+  <li>Deploy Wazuh as a centralized SIEM/manager and get its dashboard reliably reachable from the host.</li>
+  <li>Enroll Windows endpoints as Wazuh agents and confirm active telemetry.</li>
+  <li>Build a dedicated Kali Linux attacker VM, networked to reach lab endpoints without needing internet access on the lab-internal segment.</li>
+  <li>Operate the whole environment within a strict RAM budget using a session-based, power-on/power-off workflow instead of an always-on lab.</li>
+</ul>
+
+<h2 id="environment-and-architecture">Environment and Architecture</h2>
+
+<p>The lab runs entirely from a 1TB external WD drive on a Windows host, using VirtualBox as the hypervisor. Four VMs make up the environment:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DC01 (Windows Server, soclab.local)      ─┐
+WIN10-ENDPOINT (domain-joined)           ─┼── Internal Network (192.168.56.0/24)
+KALI-ATTACKER (Kali Linux)               ─┘         │
+                                                    │
+WAZUH-MANAGER (Ubuntu Server 24.04) ────────────────┘
+        │
+        └── NAT (host access via port-forward, e.g. localhost:8443 → 443)
+</code></pre></div></div>
+
+<p><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">VM</th>
+      <th style="text-align: center">RAM</th>
+      <th style="text-align: center">Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">DC01</td>
+      <td style="text-align: center">2048 MB</td>
+      <td style="text-align: center">Domain controller</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">WIN10-ENDPOINT</td>
+      <td style="text-align: center">2048 MB</td>
+      <td style="text-align: center">Domain-joined endpoint</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">WAZUH-MANAGER</td>
+      <td style="text-align: center">4096 MB</td>
+      <td style="text-align: center">SIEM manager + dashboard (bumped up from an original 3072MB plan the indexer and dashboard genuinely needed the extra headroom to install and run reliably)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">KALI-ATTACKER</td>
+      <td style="text-align: center">2048 MB</td>
+      <td style="text-align: center">Attacker box</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>With all four running simultaneously the host would sit at 10GB+, leaving nothing for the OS itself — not stable on a 12GB budget. The lab instead runs in defined sessions: an attack session (Kali + WIN10-ENDPOINT, ~4GB), a log-review session (Wazuh + whichever machine generated the logs, ~6GB), and a domain-admin session (DC01 + WIN10-ENDPOINT, ~4GB) — powering off whatever isn’t actively in use rather than leaving it running in the background.</p>
+
+<h2 id="tools">Tools</h2>
+
+<ul>
+  <li><strong>VirtualBox:</strong> hypervisor for the entire lab</li>
+  <li><strong>Windows Server 2022:</strong> Active Directory domain controller (DC01)</li>
+  <li><strong>Windows 10:</strong> domain-joined endpoint, Wazuh agent</li>
+  <li><strong>Wazuh 4.9.x:</strong> SIEM manager, indexer, and dashboard (all-in-one install on Ubuntu Server 24.04 LTS)</li>
+  <li><strong>Kali Linux:</strong> dedicated attacker VM</li>
+  <li><strong>NetworkManager (nmcli):</strong> manual static IP configuration on internal-only network segments</li>
+</ul>
+
+<h2 id="implementation">Implementation</h2>
+
+<h3 id="active-directory-domain">Active Directory domain</h3>
+
+<p>DC01 was stood up as a Windows Server 2022 domain controller for <code class="language-plaintext highlighter-rouge">soclab.local</code>, with WIN10-ENDPOINT joined to the domain as a standard workstation. Both sit on an internal-only VirtualBox network so domain traffic never touches the host’s real network.</p>
+
+<h3 id="wazuh-manager-deployment">Wazuh manager deployment</h3>
+
+<p>Wazuh’s all-in-one installer was run on a fresh Ubuntu Server 24.04 LTS VM. The install itself surfaced two recurring classes of problem worth documenting:</p>
+
+<ul>
+  <li><strong>Dashboard unreachable after a “successful” install.</strong> <code class="language-plaintext highlighter-rouge">systemctl status wazuh-dashboard</code> reported active, but <code class="language-plaintext highlighter-rouge">curl https://localhost:443</code> refused the connection. <code class="language-plaintext highlighter-rouge">ss -tulnp</code> confirmed the dashboard process (Node/OpenSearch Dashboards) simply hadn’t finished binding its listener yet a timing gap between systemd reporting “Started” and the app actually accepting connections. Waiting it out (or extending <code class="language-plaintext highlighter-rouge">TimeoutStartSec</code> on the indexer unit) resolved it.</li>
+  <li><strong>“Wazuh dashboard server is not ready yet”</strong> on a later access attempt, which traced to the same root cause a RAM-constrained indexer taking longer than systemd’s default timeout to fully initialize before the dashboard could complete its startup handshake with it.</li>
+</ul>
+
+<p>Once resolved, the dashboard was reachable from the host browser via a NAT port-forward rule (host <code class="language-plaintext highlighter-rouge">8443</code> → guest <code class="language-plaintext highlighter-rouge">443</code>).</p>
+
+<h3 id="agent-enrollment">Agent enrollment</h3>
+
+<p>Windows agents for DC01 and WIN10-ENDPOINT were deployed through the dashboard’s built-in “Deploy new agent” wizard, which generates a ready-to-run PowerShell install command pointed at the manager’s internal IP.</p>
+
+<p>One recurring snag: <code class="language-plaintext highlighter-rouge">Invoke-WebRequest</code> against <code class="language-plaintext highlighter-rouge">packages.wazuh.com</code> returned a <code class="language-plaintext highlighter-rouge">403 Forbidden</code> — most likely upstream bot/WAF protection rejecting PowerShell’s default request fingerprint. Switching to Windows’ native <code class="language-plaintext highlighter-rouge">curl.exe</code> (distinct from the <code class="language-plaintext highlighter-rouge">curl</code> alias to <code class="language-plaintext highlighter-rouge">Invoke-WebRequest</code>) resolved the download cleanly on the first retry. Both agents installed via <code class="language-plaintext highlighter-rouge">msiexec</code> and started successfully via <code class="language-plaintext highlighter-rouge">NET START WazuhSvc</code>, then confirmed <strong>Active</strong> in the dashboard.</p>
+
+<h3 id="kali-attacker-vm">Kali attacker VM</h3>
+
+<p>Kali was installed from the standard ISO rather than the prebuilt image, with the installer’s primary network interface set to the NAT adapter (needed for package mirror access during install — the internal lab segment has no DHCP and would have stalled the installer). Guided partitioning (“all files in one partition”) was used across a 26.8GB disk, keeping the build simple for a single-purpose attack VM.</p>
+
+<p>Post-install, the internal-network interface (<code class="language-plaintext highlighter-rouge">eth0</code>) had no NetworkManager profile at all only the NAT interface used during install had been configured. A manual profile was created and activated.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli con add <span class="nb">type </span>ethernet ifname eth0 con-name <span class="s2">"eth0-internal"</span> <span class="se">\</span>
+  ipv4.addresses 192.168.56.40/24 ipv4.method manual
+<span class="nb">sudo </span>nmcli con up <span class="s2">"eth0-internal"</span>
+</code></pre></div></div>
+
+<p>A successful ping to the Wazuh manager (<code class="language-plaintext highlighter-rouge">192.168.56.30</code>) confirmed Kali could reach the internal lab network while retaining internet access via its separate NAT adapter — dual-homed, as intended.</p>
+
+<h2 id="challenges">Challenges</h2>
+
+<ul>
+  <li>RAM constraints shaped nearly every infrastructure decision, from Wazuh’s memory allocation to the session-based power-on/power-off workflow.</li>
+  <li>Startup-timing race conditions (dashboard “not ready” errors) appeared twice during the Wazuh install, both traced back to the indexer needing more time than systemd’s default timeout allowed under constrained resources.</li>
+  <li>A CDN/WAF-level block on PowerShell’s default HTTP client required switching tools (<code class="language-plaintext highlighter-rouge">curl.exe</code> over <code class="language-plaintext highlighter-rouge">Invoke-WebRequest</code>) rather than any configuration fix.</li>
+  <li>Internal-only network segments have no DHCP by design, which meant every new VM’s internal interface needed manual static IP configuration before it could talk to the rest of the lab.</li>
+</ul>
+
+<h2 id="current-status">Current Status</h2>
+
+<ul>
+  <li>Active Directory domain operational (DC01 + WIN10-ENDPOINT)</li>
+  <li>Wazuh manager, indexer, and dashboard installed and reachable</li>
+  <li>Both Windows endpoints enrolled as active Wazuh agents</li>
+  <li>Kali attacker VM built, networked, and verified reachable to the lab segment</li>
+  <li>Host-Only Adapter networking issue (<code class="language-plaintext highlighter-rouge">VERR_INTNET_FLT_IF_NOT_FOUND</code>) — worked around via NAT port-forwarding, not yet root-caused</li>
+</ul>
+
+<h2 id="lessons-learned">Lessons Learned</h2>
+
+<ul>
+  <li>Patience</li>
+  <li>A service reporting “active” in systemd doesn’t mean it’s actually ready to serve traffic — always verify with a direct connection test, not just service status.</li>
+  <li>Tooling-level HTTP client differences (PowerShell’s <code class="language-plaintext highlighter-rouge">Invoke-WebRequest</code> vs. native <code class="language-plaintext highlighter-rouge">curl.exe</code>) can be the actual fix when a download is blocked, before assuming it’s a permissions or network problem.</li>
+  <li>Planning a lab around simultaneous RAM budgets rather than assuming “always on” forces clearer session boundaries — and mirrors how a real, resource-constrained SOC has to prioritize what’s actively being worked versus idle.</li>
+  <li>Internal-only virtual networks need their static addressing planned deliberately from the first VM, so later machines don’t collide or get stranded without connectivity.</li>
+  <li>EVEN MORE PATIENCE</li>
+</ul>
+ 
+  </article>
+</div>
+</div>
+    </main>
+
+    <footer>
+  <div class="footer-shell">© 2026 Meiji - All rights reserved.</div>
+</footer>
+
+    <script
+      src="/assets/js/site.js?v=20260720"
+      data-page="projects"
+      data-root=""
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+       Kioptrix Level 1 — Meiji 
+    </title>
+    <link rel="stylesheet" href="/assets/css/site.css" />
+  </head>
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="eyebrow">Investigation Dossier</span>
+        <span class="name">MEIJI // CASE FILES</span>
+      </div>
+      <span class="page-tag">
+        
+          Projects
+        
+      </span>
+    </div>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a  href="/">Home</a>
+      <a class="active" href="/projects">Projects</a>
+      <a  href="/challenges">Challenges</a>
+      <a  href="/writeups">Writeups</a>
+      <a  href="/certificates">Certificates</a>
+      <a  href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+    <main>
+      <div class="main-shell"><div class="detail-layout">
+  
+  <div class="contents-card">
+    <div class="contents-head">
+      <span class="contents-label">Contents</span>
+    </div>
+    <div class="contents-list">
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        
+        <li>
+          <a href="#highlights"
+            >Proof of Concept</a
+          >
+        </li>
+           
+      </ul>
+    </div>
+  </div>
+  
+
+  <article class="detail-page" data-collection="projects">
+    <span class="meta">SEC-2026-001</span>
+    <h1>Kioptrix Level 1</h1>
+     <p><img src="/assets/images/projects/kioptrixl1/kioptrixl1.png" alt="KioptrixL1" /></p>
+
+<h2 id="executive-summary">Executive Summary</h2>
+<p>During the security assessment of the Kioptrix Level 1 machine, we identified a Critical vulnerability related to an outdated and unpatched file-sharing service (Samba 2.2.1a).</p>
+
+<p>If exploited, an attacker could gain complete, unrestricted control over the target system including access to all files, user accounts, and sensitive data without needing a username or password.</p>
+
+<p>The attack was carried out successfully in a controlled lab environment, confirming that the vulnerability is real and easily exploitable using freely available tools. 
+The most critical takeaway is that running outdated software with no firewall protection can allow an outsider to take over an entire system in a matter of minutes.</p>
+
+<h2 id="vulnerability-details">Vulnerability Details</h2>
+
+<ul>
+  <li>Vulnerability Type: Stack-Based Buffer Overflow</li>
+  <li>CVE: CVE-2003-0201</li>
+  <li>Affected Component: Samba service (SMB port 139), specifically the trans2open request handler</li>
+</ul>
+
+<p>Description: Samba versions 2.2.x contain a critical buffer overflow in the way trans2 requests are processed. The flaw exists in code that runs before any authentication check, meaning no credentials are needed to trigger it. By sending a specially crafted trans2 packet, an attacker can overflow the stack buffer and overwrite the return address, redirecting execution to arbitrary shellcode. Metasploit’s exploit/linux/samba/trans2open module automates this entirely.</p>
+
+<h2 id="business-risk-and-impact">Business Risk and Impact</h2>
+
+<h3 id="risk-assessment-dread-framework">Risk Assessment (DREAD Framework)</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Metric</th>
+      <th style="text-align: center">Rating (1-10)</th>
+      <th style="text-align: center">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Damage</strong></td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">Attacker gains an instant root shell full system compromise, including all files, users, and sensitive data</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Reproducibility</strong></td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">The exploit is fully automated via Metasploit and succeeds every time with no variation</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Exploitability</strong></td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">Requires no credentials, no prior access, and no specialized knowledge just a few Metasploit commands</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Affected Users</strong></td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">Every user account, file, and service on the system is exposed once root is obtained</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Discoverability</strong></td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">Port 139 is immediately visible via a basic nmap scan; Samba version is trivially fingerprinted</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Total Score</strong></td>
+      <td style="text-align: center"><strong>9.6 (Critical)</strong></td>
+      <td style="text-align: center">Across all five metrics, this vulnerability scores near-maximum posing an extreme risk to any exposed system</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="cvss-score">CVSS Score</h3>
+<p>Vector String: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H</p>
+
+<p>Base Score: 9.8 (Critical)</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Metric Group</th>
+      <th style="text-align: center">Metric</th>
+      <th style="text-align: center">Value</th>
+      <th style="text-align: center">Justification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Attack Vector (AV)</strong></td>
+      <td style="text-align: center">Network</td>
+      <td style="text-align: center">N</td>
+      <td style="text-align: center">The exploit is launched remotely over the network; no physical access is required.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Attack Complexity (AC)</strong></td>
+      <td style="text-align: center">Low</td>
+      <td style="text-align: center">L</td>
+      <td style="text-align: center">No special conditions or preparation are needed; the exploit works reliably every time.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Privileges Required (PR)</strong></td>
+      <td style="text-align: center">None</td>
+      <td style="text-align: center">N</td>
+      <td style="text-align: center">The vulnerability is pre-authentication; zero credentials are needed.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>User Interaction (UI)</strong></td>
+      <td style="text-align: center">None</td>
+      <td style="text-align: center">N</td>
+      <td style="text-align: center">The attacker does not need the victim to perform any action to trigger the exploit.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Scope (S)</strong></td>
+      <td style="text-align: center">Unchanged</td>
+      <td style="text-align: center">U</td>
+      <td style="text-align: center">The exploit impacts only the vulnerable Samba service and its host system.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Confidentiality (C)</strong></td>
+      <td style="text-align: center">High</td>
+      <td style="text-align: center">H</td>
+      <td style="text-align: center">Full root access exposes all files, password hashes, and sensitive data on the system.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Integrity (I)</strong></td>
+      <td style="text-align: center">High</td>
+      <td style="text-align: center">H</td>
+      <td style="text-align: center">The attacker can modify, delete, or plant any file on the system.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Availability (A)</strong></td>
+      <td style="text-align: center">High</td>
+      <td style="text-align: center">H</td>
+      <td style="text-align: center">The attacker can shut down, crash, or completely disable the target system at will.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="mitre-attck-mapping">MITRE ATT&amp;CK Mapping</h3>
+<p>The attack followed a straightforward kill chain: the attacker discovered the target through network scanning, identified a critically outdated service, exploited a pre-authentication buffer overflow to land a root shell, and then secured persistence by manipulating credentials. No privilege escalation was needed at any point due to the service running as root.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Tactic</th>
+      <th style="text-align: center">Technique ID</th>
+      <th style="text-align: center">Technique Name</th>
+      <th style="text-align: center">How It Was Used</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Reconnaissance</td>
+      <td style="text-align: center">T1046</td>
+      <td style="text-align: center">Network Service Discovery</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">nmap</code> was used to scan the network and identify open ports and services on the target.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Reconnaissance</td>
+      <td style="text-align: center">T1082</td>
+      <td style="text-align: center">System Information Discovery</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">nmap -O</code> and <code class="language-plaintext highlighter-rouge">-sV</code> were used to fingerprint the target operating system and determine the Samba version.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Initial Access</td>
+      <td style="text-align: center">T1190</td>
+      <td style="text-align: center">Exploit Public-Facing Application</td>
+      <td style="text-align: center">The trans2open buffer overflow (CVE-2003-0201) was exploited to gain access through the exposed SMB port 139.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Execution</td>
+      <td style="text-align: center">T1059.004</td>
+      <td style="text-align: center">Command and Scripting Interpreter: Unix Shell</td>
+      <td style="text-align: center">A reverse shell (<code class="language-plaintext highlighter-rouge">/bin/sh</code>) was spawned on the target after successful exploitation.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Command &amp; Control</td>
+      <td style="text-align: center">T1571</td>
+      <td style="text-align: center">Non-Standard Port</td>
+      <td style="text-align: center">A reverse TCP shell connected back to the attacker over a non-standard port.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Persistence</td>
+      <td style="text-align: center">T1098</td>
+      <td style="text-align: center">Account Manipulation</td>
+      <td style="text-align: center">The attacker ran <code class="language-plaintext highlighter-rouge">passwd root</code> to change the root password and maintain persistent access.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="proof-of-concept-poc">Proof of Concept (PoC)</h2>
+
+<h3 id="phase-1-reconnaissance">Phase 1: Reconnaissance</h3>
+
+<h4 id="host-discovery">Host Discovery</h4>
+<p>Run nmap -sn to discover live hosts on the network.</p>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc1.png" alt="poc1" /></p>
+
+<p>There are 5 hosts the 2.1 is our network gateway and the 2.2 &amp; 2.3 are the network interface cards and by process of elimination we now know that our target machine’s ip is 10.0.2.4</p>
+
+<h4 id="service-fingerprinting">Service Fingerprinting</h4>
+<p>Once the target has been identified run nmap -O and nmap -sV to fingerprint the OS and open services. Port 139 (SMB) is found open</p>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc2.png" alt="poc2" /></p>
+
+<p>Use msfconsole which launches the Metasploit Framework for vulnerability scanning and exploitation.</p>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc4.png" alt="poc4" /></p>
+
+<p>We now know that our target is using samba 2.2.1a and running linux</p>
+
+<h3 id="phase-2-initial-access">Phase 2: Initial Access</h3>
+
+<p>Go into metasploit and search for samba exploits at the very bottom we can see that an exploit named trans2open targets samba 2.2.x so lets use it</p>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc8.png" alt="poc8" /></p>
+
+<p>use exploit/linux/samba/trans2open which selects the specific exploit module targeting a buffer overflow in Samba.</p>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc5.png" alt="poc5" /></p>
+
+<h3 id="phase-3-execution--post-exploitation">Phase 3: Execution &amp; Post-Exploitation</h3>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc6.png" alt="poc6" /></p>
+
+<p>Command Breakdown:</p>
+<ul>
+  <li>Started reverse TCP handler on 10.0.2.15:4444 -&gt; before metasploit sends the attack, it opens a “listening” port on your own machine.</li>
+  <li>Trying return address 0xbffff… -&gt; the brute force buffer overflow attack</li>
+  <li>Command shell session 4 opened (10.0.2.15:4444 -&gt; 10.0.2.4:1028) -&gt; This shows the successful link</li>
+</ul>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc10.png" alt="poc10" /></p>
+
+<p>We established that we now have root access to the machine using a reverse shell now lets change the root user password</p>
+
+<p><img src="/assets/images/projects/kioptrixl1/poc11.png" alt="poc11" />
+Tada</p>
+
+<h2 id="root-cause-analysis">Root Cause Analysis</h2>
+<p>The vulnerability exists because Samba 2.2.x fails to perform proper bounds checking on user-supplied data in the trans2 request handler before the buffer is written to the stack.</p>
+<ul>
+  <li>Primary Cause: No input validation or bounds checking on incoming SMB packet data.</li>
+  <li>Technical Breakdown: The trans2open function copies attacker-controlled data into a fixed-size stack buffer without verifying its length. This overwrites the return address and redirects execution to the attacker’s shellcode. The exploit fires pre-authentication, so there is no login barrier whatsoever.</li>
+  <li>Compounding Factor: The Samba daemon was running as root (uid=0), so successful exploitation immediately yielded the highest possible privilege level with no further steps needed.</li>
+</ul>
+
+<h2 id="recommendations">Recommendations</h2>
+
+<p>Short-Term Fix (Patch)</p>
+<ul>
+  <li>Immediately upgrade Samba to version 2.2.8a or higher, or migrate to a currently supported release.</li>
+  <li>Block TCP/UDP ports 139 and 445 at the network perimeter firewall. SMB should never be exposed to untrusted networks.</li>
+</ul>
+
+<p>Long-Term Prevention</p>
+<ul>
+  <li>Enforce the Principle of Least Privilege: run all services under dedicated low-privilege service accounts, never as root.</li>
+  <li>Disable null (unauthenticated) sessions by adding restrict anonymous = 2 to smb.conf.</li>
+  <li>Conduct regular vulnerability scans and patch audits to catch outdated software.</li>
+  <li>Implement host-based firewalls (e.g., iptables) as a secondary defense layer.</li>
+</ul>
+ 
+  </article>
+</div>
+</div>
+    </main>
+
+    <footer>
+  <div class="footer-shell">© 2026 Meiji - All rights reserved.</div>
+</footer>
+
+    <script
+      src="/assets/js/site.js?v=20260720"
+      data-page="projects"
+      data-root=""
+    ></script>
+  </body>
+</html>

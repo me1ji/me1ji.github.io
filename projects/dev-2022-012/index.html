@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+       CLI Clinic Logbook — Meiji 
+    </title>
+    <link rel="stylesheet" href="/assets/css/site.css" />
+  </head>
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="eyebrow">Investigation Dossier</span>
+        <span class="name">MEIJI // CASE FILES</span>
+      </div>
+      <span class="page-tag">
+        
+          Projects
+        
+      </span>
+    </div>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a  href="/">Home</a>
+      <a class="active" href="/projects">Projects</a>
+      <a  href="/challenges">Challenges</a>
+      <a  href="/writeups">Writeups</a>
+      <a  href="/certificates">Certificates</a>
+      <a  href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+    <main>
+      <div class="main-shell"><div class="detail-layout">
+  
+  <div class="contents-card">
+    <div class="contents-head">
+      <span class="contents-label">Contents</span>
+    </div>
+    <div class="contents-list">
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+           
+      </ul>
+    </div>
+  </div>
+  
+
+  <article class="detail-page" data-collection="projects">
+    <span class="meta">DEV-2022-012</span>
+    <h1>CLI Clinic Logbook</h1>
+     <h2 id="overview">Overview</h2>
+<p>A console-based clinic logbook application designed to manage patient visits across three departments (SHS, JHS, Elementary) during a Work Immersion program. The system provides complete patient record management with data persistence per department.</p>
+
+<h3 id="challenge">Challenge</h3>
+<p>Manual paper-based clinic logging was inefficient and error-prone for tracking patient visits across multiple departments.</p>
+
+<h3 id="solution">Solution</h3>
+<p>Built a structured Java application with department-separated data repositories and intuitive CLI interface for staff.</p>
+
+<h2 id="core-features">Core Features</h2>
+<ul>
+  <li>Patient registration with auto-timestamping</li>
+  <li>CRUD operations (Create, Read, Update, Delete)</li>
+  <li>Multi-department data separation</li>
+  <li>Formatted table display for patient records</li>
+  <li>Automatic data persistence (CSV storage)</li>
+  <li>Export data to Desktop</li>
+</ul>
+
+<h2 id="code-snippets">Code Snippets</h2>
+
+<p><img src="/assets/images/projects/cli_clinic/codesnip1.png" alt="Snip1" /></p>
+<ul>
+  <li>This class encapsulates all data access logic for patient records, making it easy to swap data sources later (e.g., database). Input validation prevents crashes from invalid indices. The separation of concerns means UI code doesn’t directly manipulate patient lists.</li>
+</ul>
+
+<p><img src="/assets/images/projects/cli_clinic/codesnip2.png" alt="Snip2" /></p>
+<ul>
+  <li>This single method handles updates for 7 different fields, eliminating code duplication and making maintenance easier. The error handling prevents invalid field updates</li>
+</ul>
+ 
+  </article>
+</div>
+</div>
+    </main>
+
+    <footer>
+  <div class="footer-shell">© 2026 Meiji - All rights reserved.</div>
+</footer>
+
+    <script
+      src="/assets/js/site.js?v=20260720"
+      data-page="projects"
+      data-root=""
+    ></script>
+  </body>
+</html>

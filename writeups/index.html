@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+       Writeups — Meiji 
+    </title>
+    <link rel="stylesheet" href="/assets/css/site.css" />
+  </head>
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="eyebrow">Investigation Dossier</span>
+        <span class="name">MEIJI // CASE FILES</span>
+      </div>
+      <span class="page-tag">
+        
+          03 · Notes & Write-ups
+        
+      </span>
+    </div>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a  href="/">Home</a>
+      <a  href="/projects">Projects</a>
+      <a  href="/challenges">Challenges</a>
+      <a class="active" href="/writeups">Writeups</a>
+      <a  href="/certificates">Certificates</a>
+      <a  href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+    <main>
+      <div class="main-shell"><section class="section-head">
+  <h2>Writeups</h2>
+  
+  <div class="rule"></div>
+</section>
+
+ 
+<div class="tabs">
+  <button class="tab active" type="button">All</button>
+  <button class="tab" type="button">Writeups</button>
+  <button class="tab" type="button">Notes</button>
+</div>
+ 
+
+<div class="cards-grid">
+  
+    
+    
+      <article
+  class="card clickable"
+  
+  data-type="note"
+  
+>
+  <span class="card-accent" aria-hidden="true"></span>
+  <div class="card-header">
+    <span class="meta">NT-2026-001</span>
+  </div>
+  <h3>ISC2 CC Notes & Thoughts</h3>
+  
+  <p class="card-copy">July · 2026</p>
+  
+  <p>My Notes and Experience in preparation for the CC exam</p>
+  
+  <div class="tag-row">
+    
+    <span>CC</span>
+    
+  </div>
+   
+  <span class="open-hint">
+    <a href="https://medium.com/@markjamesgonzales99/time-travel-is-dangerous-the-risk-of-legacy-systems-3bfa724a578d" target="_blank" rel="noopener noreferrer"
+      >Read More →</a
+    >
+  </span>
+  
+</article>
+
+    
+      <article
+  class="card clickable"
+  
+  data-type="writeup"
+  
+>
+  <span class="card-accent" aria-hidden="true"></span>
+  <div class="card-header">
+    <span class="meta">WU-2025-001</span>
+  </div>
+  <h3>HTB: Cyber Apocalypse Writeup (OSINT)</h3>
+  
+  <p class="card-copy">July · 2026</p>
+  
+  <p>Writeups for the OSINT challenges in HTB Cyber Apocalypse</p>
+  
+  <div class="tag-row">
+    
+    <span>OSINT</span>
+    
+  </div>
+   
+  <span class="open-hint">
+    <a href="https://medium.com/@markjamesgonzales99/time-travel-is-dangerous-the-risk-of-legacy-systems-3bfa724a578d" target="_blank" rel="noopener noreferrer"
+      >Read More →</a
+    >
+  </span>
+  
+</article>
+
+    
+  
+</div>
+</div>
+
+  
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabs = document.querySelectorAll(".tabs .tab");
+    const cards = document.querySelectorAll(".cards-grid .card");
+    if (!tabs.length || !cards.length) return;
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", function () {
+        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        const filter = tab.textContent.trim().toLowerCase();
+        cards.forEach((card) => {
+          const type = card.dataset.type || "writeup";
+          let show = false;
+          if (filter === "all") {
+            show = true;
+          } else if (filter === "writeups" && type === "writeup") {
+            show = true;
+          } else if (filter === "notes" && type === "note") {
+            show = true;
+          }
+          card.style.display = show ? "" : "none";
+        });
+      });
+    });
+  });
+</script>
+
+</div>
+    </main>
+
+    <footer>
+  <div class="footer-shell">© 2026 Meiji - All rights reserved.</div>
+</footer>
+
+    <script
+      src="/assets/js/site.js?v=20260720"
+      data-page="home"
+      data-root=""
+    ></script>
+  </body>
+</html>

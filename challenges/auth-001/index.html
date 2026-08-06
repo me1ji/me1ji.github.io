@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+       f1ndM3 — Meiji 
+    </title>
+    <link rel="stylesheet" href="/assets/css/site.css" />
+  </head>
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="eyebrow">Investigation Dossier</span>
+        <span class="name">MEIJI // CASE FILES</span>
+      </div>
+      <span class="page-tag">
+        
+          Challenges
+        
+      </span>
+    </div>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a  href="/">Home</a>
+      <a  href="/projects">Projects</a>
+      <a class="active" href="/challenges">Challenges</a>
+      <a  href="/writeups">Writeups</a>
+      <a  href="/certificates">Certificates</a>
+      <a  href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+    <main>
+      <div class="main-shell"><div class="detail-layout challenge-detail-layout">
+  <article class="detail-page challenge-detail-page">
+    <span class="meta">OSINT-xxxx-001</span>
+    <h1>f1ndM3</h1>
+    
+    <p class="summary" id="overview">Author: Meiji · Category: OSINT · Difficulty: Easy</p>
+    
+    <br />
+    <h2 id="challenge-description">Challenge Description</h2>
+<p>Time for a breath of fresh air now can you find me and the flag I hid? 😃</p>
+
+<p>Flag Format: PwnStar{}</p>
+
+<h3 id="files">Files</h3>
+<ul>
+  <li><a href="/assets/images/challenges/findme/N0tAh1nT.txt">N0tAh1nT.txt</a>   <a href="/assets/images/challenges/findme/wowmountainwow.png">wowmountainwow.png</a></li>
+</ul>
+
+  
+<div class="flag-box">
+  <input
+    id="flag-input"
+    type="text"
+    placeholder="flag{...}"
+    autocomplete="off"
+    spellcheck="false"
+  />
+  <button id="flag-submit">Submit</button>
+</div>
+<p id="flag-feedback" class="flag-feedback"></p>
+<p class="flag-note"></p>
+<script>
+  (function () {
+    const flagTarget = "e7be915e65e7f0c4368245c175cca58e1463cbf61382cd516b3acc4902456975";
+    async function checkFlag() {
+      const input = document.getElementById("flag-input");
+      const feedback = document.getElementById("flag-feedback");
+      const value = ((input && input.value) || "").trim();
+      if (!value) return;
+      const enc = new TextEncoder().encode(value);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      const hex = Array.from(new Uint8Array(buf))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+      if (hex === flagTarget) {
+        feedback.textContent = "Correct!";
+        feedback.className = "flag-feedback correct";
+      } else {
+        feedback.textContent = "Incorrect flag, try again.";
+        feedback.className = "flag-feedback incorrect";
+      }
+    }
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "flag-submit") checkFlag();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && document.getElementById("flag-input"))
+        checkFlag();
+    });
+  })();
+</script>
+
+ 
+  </article>
+</div>
+</div>
+    </main>
+
+    <footer>
+  <div class="footer-shell">© 2026 Meiji - All rights reserved.</div>
+</footer>
+
+    <script
+      src="/assets/js/site.js?v=20260720"
+      data-page="challenges"
+      data-root=""
+    ></script>
+  </body>
+</html>
