@@ -937,8 +937,28 @@ footer {
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; gap: 24px; }
   .header-top { flex-direction: column; align-items: stretch; gap: 18px; }
-  .nav-links { overflow-x: auto; padding-bottom: 8px; justify-content: flex-start; }
-  .nav-links a { flex: 0 0 auto; padding: 10px 14px 12px; }
+  .nav-links {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+    justify-content: flex-start;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-links {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .nav-links a {
+    flex: 0 0 auto;
+    min-width: max-content;
+    padding: 10px 14px 12px;
+    scroll-snap-align: center;
+  }
   .hero p { max-width: none; font-size: 15px; }
   .hero-tags { gap: 6px; margin-top: 18px; }
   .folder-card { padding: 22px; }
