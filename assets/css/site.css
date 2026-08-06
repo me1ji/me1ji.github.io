@@ -936,38 +936,8 @@ footer {
 
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; gap: 24px; }
-  .header-top { flex-direction: column; align-items: stretch; gap: 18px; }
-  .nav-links {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 8px;
-    justify-content: flex-start;
-    gap: 8px;
-    -webkit-overflow-scrolling: touch;
-  }
-  .nav-links::-webkit-scrollbar {
-    display: none;
-  }
-  .nav-links {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .nav-links a {
-    flex: 0 0 auto;
-    min-width: max-content;
-    padding: 10px 14px 12px;
-    scroll-snap-align: center;
-  }
-  .hero p { max-width: none; font-size: 15px; }
-  .hero-tags { gap: 6px; margin-top: 18px; }
-  .folder-card { padding: 22px; }
-  .folder-card dl { grid-template-columns: 1fr; gap: 10px 0; }
-  .section-head { gap: 12px; }
-  .section-head h2 { font-size: 24px; }
-  .cards-grid { grid-template-columns: 1fr; gap: 18px; }
-  .header-inner,
-  .main-shell,
-  .footer-shell { padding: 0 5vw; }
+  .header-top { flex-direction: column; align-items: flex-start; }
+  .nav-links { overflow-x: auto; }
+  .cards-grid { grid-template-columns: 1fr; }
   .contact-wrap { grid-template-columns: 1fr; }
 }
