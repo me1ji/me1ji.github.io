@@ -1,0 +1,41 @@
+<article
+  class="card certificate-card"
+  {%
+  if
+  include.datatype
+  %}
+  data-type="{{ include.datatype }}"
+  {%
+  endif
+  %}
+  data-case-id="{{ include.caseId }}"
+>
+  <span class="card-accent" aria-hidden="true"></span>
+  <div class="card-header">
+    <span class="meta">{{ include.meta }}</span>
+    {% if include.stampLabel %}
+    <span class="stamp {{ include.stamp | default: '' | downcase }}"
+      >{{ include.stampLabel }}</span
+    >
+    {% endif %}
+  </div>
+  <h3>{{ include.title }}</h3>
+  {% if include.copy %}
+  <p class="card-copy">{{ include.copy }}</p>
+  {% endif %}
+  <p>{{ include.summary }}</p>
+  <div class="certificate-footer">
+    {% if include.tools %} {% for tool in include.tools %}
+    <span class="credential-id">{{ tool }}</span>
+    {% endfor %} {% endif %} {% if include.certImg %}
+    <button
+      type="button"
+      class="cert-link"
+      data-cert-img="{{ include.certImg | relative_url }}"
+      data-cert-title="{{ include.title }}"
+    >
+      View Certificate →
+    </button>
+    {% endif %}
+  </div>
+</article>

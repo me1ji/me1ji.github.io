@@ -1,0 +1,44 @@
+{% if page.flag_target %}
+<div class="flag-box">
+  <input
+    id="flag-input"
+    type="text"
+    placeholder="flag{...}"
+    autocomplete="off"
+    spellcheck="false"
+  />
+  <button id="flag-submit">Submit</button>
+</div>
+<p id="flag-feedback" class="flag-feedback"></p>
+<p class="flag-note"></p>
+<script>
+  (function () {
+    const flagTarget = "{{ page.flag_target }}";
+    async function checkFlag() {
+      const input = document.getElementById("flag-input");
+      const feedback = document.getElementById("flag-feedback");
+      const value = ((input && input.value) || "").trim();
+      if (!value) return;
+      const enc = new TextEncoder().encode(value);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      const hex = Array.from(new Uint8Array(buf))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+      if (hex === flagTarget) {
+        feedback.textContent = "Correct!";
+        feedback.className = "flag-feedback correct";
+      } else {
+        feedback.textContent = "Incorrect flag, try again.";
+        feedback.className = "flag-feedback incorrect";
+      }
+    }
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "flag-submit") checkFlag();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && document.getElementById("flag-input"))
+        checkFlag();
+    });
+  })();
+</script>
+{% endif %}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% if page.title %} {{ page.title }} — Meiji {% else %} Meiji — Case Files
+      {% endif %}
+    </title>
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/site.css" />
+  </head>
+  <body>
+    {% include header.html %}
+
+    <main>
+      <div class="main-shell">{{ content }}</div>
+    </main>
+
+    {% include footer.html %}
+    <script
+      src="{{ site.baseurl }}/assets/js/site.js?v=20260720"
+      data-page="{% if page.collection %}{{ page.collection }}{% else %}home{% endif %}"
+      data-root="{{ site.baseurl }}"
+    ></script>
+  </body>
+</html>

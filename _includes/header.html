@@ -1,0 +1,27 @@
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="eyebrow">Investigation Dossier</span>
+        <span class="name">MEIJI // CASE FILES</span>
+      </div>
+      <span class="page-tag">
+        {% if page.page_tag %}
+          {{ page.page_tag }}
+        {% elsif page.collection %}
+          {{ page.collection | capitalize }}
+        {% else %}
+          Home
+        {% endif %}
+      </span>
+    </div>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a {% if page.url == '/' %}class="active"{% endif %} href="{{ site.baseurl }}/">Home</a>
+      <a {% if page.url contains '/projects/' %}class="active"{% endif %} href="{{ site.baseurl }}/projects">Projects</a>
+      <a {% if page.url contains '/challenges/' %}class="active"{% endif %} href="{{ site.baseurl }}/challenges">Challenges</a>
+      <a {% if page.url contains '/writeups/' %}class="active"{% endif %} href="{{ site.baseurl }}/writeups">Writeups</a>
+      <a {% if page.url contains '/certificates/' %}class="active"{% endif %} href="{{ site.baseurl }}/certificates">Certificates</a>
+      <a {% if page.url contains '/contact' %}class="active"{% endif %} href="{{ site.baseurl }}/contact">Contact</a>
+    </nav>
+  </div>
+</header>

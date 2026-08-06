@@ -1,0 +1,32 @@
+<article
+  class="card clickable"
+  {%
+  if
+  include.datatype
+  %}
+  data-type="{{ include.datatype }}"
+  {%
+  endif
+  %}
+>
+  <span class="card-accent" aria-hidden="true"></span>
+  <div class="card-header">
+    <span class="meta">{{ include.meta }}</span>
+  </div>
+  <h3>{{ include.title }}</h3>
+  {% if include.copy %}
+  <p class="card-copy">{{ include.copy }}</p>
+  {% endif %}
+  <p>{{ include.summary }}</p>
+  {% if include.tags %}
+  <div class="tag-row">
+    {% for tag in include.tags %}
+    <span>{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %} {% if include.link %}
+  <span class="open-hint">
+    <a href="{{ include.link }}">{{ include.linkText | default: 'Play' }} →</a>
+  </span>
+  {% endif %}
+</article>

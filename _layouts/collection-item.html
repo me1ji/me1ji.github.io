@@ -1,0 +1,41 @@
+---
+layout: default
+---
+
+<div class="detail-layout">
+  {% unless page.collection == "challenges" %}
+  <div class="contents-card">
+    <div class="contents-head">
+      <span class="contents-label">Contents</span>
+    </div>
+    <div class="contents-list">
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        {% if content contains "Proof of Concept" or content contains
+        "Highlights" %}
+        <li>
+          <a href="#highlights"
+            >{% if content contains "Proof of Concept" %}Proof of Concept{% else
+            %}Highlights{% endif %}</a
+          >
+        </li>
+        {% endif %} {% if content contains "Findings" %} {% endif %} {% if
+        content contains "Findings" %}
+        <li><a href="#findings">Findings</a></li>
+        {% endif %} {% if content contains "Downloads" %}
+        <li><a href="#downloads">Downloads</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  {% endunless %}
+
+  <article class="detail-page" data-collection="{{ page.collection }}">
+    <span class="meta">{{ page.caseId }}</span>
+    <h1>{{ page.title }}</h1>
+    {% if page.meta %}
+    <p class="summary" id="overview">{{ page.meta }}</p>
+    {% endif %} {{ content }} {% if page.flag_target %} {% include
+    flag-checker.html %} {% endif %}
+  </article>
+</div>

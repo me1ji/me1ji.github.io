@@ -1,0 +1,163 @@
+---
+layout: default
+---
+
+<section class="section-head">
+  <h2>{{ page.title }}</h2>
+  {% if page.subtitle %}
+  <p class="section-copy">{{ page.subtitle }}</p>
+  {% endif %}
+  <div class="rule"></div>
+</section>
+
+{% if page.tabs %}
+<div class="tabs">
+  {% for tab in page.tabs %}
+  <button class="tab {% if forloop.first %}active{% endif %}" type="button">
+    {{ tab }}
+  </button>
+  {% endfor %}
+</div>
+{% endif %} {% if page.collection_name == "writeups" and page.tabs == nil %}
+<div class="tabs">
+  <button class="tab active" type="button">All</button>
+  <button class="tab" type="button">Writeups</button>
+  <button class="tab" type="button">Notes</button>
+</div>
+{% endif %} {% if page.collection_name == "certificates" %}
+<div class="tabs">
+  <button class="tab active" type="button">All</button>
+  <button class="tab" type="button">CTF</button>
+  <button class="tab" type="button">Learning Path</button>
+  <button class="tab" type="button">Seminar</button>
+  <button class="tab" type="button">Exams</button>
+</div>
+{% endif %}
+
+<div class="cards-grid">
+  {% if page.collection_name == "projects" %}
+    {% assign sorted_projects = site.projects | sort: "date" | reverse %}
+    {% for item in sorted_projects %}
+      {% include card-project.html meta=item.caseId title=item.title summary=item.summary tags=item.tools link=item.url linkText="Open" copy=item.meta datatype=item.type stamp=item.stamp stampLabel=item.stampLabel color=item.color %}
+    {% endfor %}
+  {% elsif page.collection_name == "challenges" %}
+    {% assign sorted_challenges = site.challenges | sort: "date" | reverse %}
+    {% for item in sorted_challenges %}
+      {% include card-challenge.html meta=item.caseId title=item.title summary=item.summary tags=item.tools link=item.url linkText="Play" copy=item.meta datatype=item.type playable=item.playable %}
+    {% endfor %}
+  {% elsif page.collection_name == "writeups" %}
+    {% assign sorted_writeups = site.writeups | sort: "date" | reverse %}
+    {% for item in sorted_writeups %}
+      {% include card-writeup.html meta=item.caseId title=item.title summary=item.summary tags=item.tools copy=item.meta datatype=item.type link=item.link linkText=item.linkText clickable=item.link %}
+    {% endfor %}
+  {% elsif page.collection_name == "certificates" %}
+    {% assign sorted_certificates = site.certificates | sort: "date" | reverse %}
+    {% for item in sorted_certificates %}
+      {% include card-certificate.html meta=item.caseId title=item.title summary=item.summary tags=item.tools link=item.url linkText="Open" copy=item.meta datatype=item.type certImg=item.certImg caseId=item.caseId %}
+    {% endfor %}
+  {% endif %}
+</div>
+</div>
+
+{% if page.collection_name == "certificates" %}
+<div class="cert-modal" id="cert-modal" aria-hidden="true">
+  <div class="cert-modal-backdrop" id="cert-modal-backdrop"></div>
+  <div class="cert-modal-content" role="dialog" aria-modal="true">
+    <button class="cert-modal-close" id="cert-modal-close" aria-label="Close">
+      ×
+    </button>
+    <img id="cert-modal-img" src="" alt="Certificate preview" />
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const certModal = document.getElementById("cert-modal");
+    const certModalImg = document.getElementById("cert-modal-img");
+    const certModalClose = document.getElementById("cert-modal-close");
+    const certModalBackdrop = document.getElementById("cert-modal-backdrop");
+
+    function openCertModal(src) {
+      certModalImg.src = src;
+      certModalImg.alt = "Certificate preview";
+      certModal.classList.add("active");
+      certModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeCertModal() {
+      certModal.classList.remove("active");
+      certModal.setAttribute("aria-hidden", "true");
+      certModalImg.src = "";
+    }
+
+    document.querySelectorAll(".cert-link[data-cert-img]").forEach((button) => {
+      button.addEventListener("click", function () {
+        openCertModal(this.dataset.certImg, this.dataset.certTitle);
+      });
+    });
+
+    certModalClose.addEventListener("click", closeCertModal);
+    certModalBackdrop.addEventListener("click", closeCertModal);
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeCertModal();
+      }
+    });
+  });
+</script>
+{% endif %} {% if page.collection_name == "certificates" %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabs = document.querySelectorAll(".tabs .tab");
+    const cards = document.querySelectorAll(".cards-grid .card");
+    if (!tabs.length || !cards.length) return;
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", function () {
+        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        const filter = tab.textContent.trim().toLowerCase();
+        cards.forEach((card) => {
+          const caseId = (card.dataset.caseId || "").toUpperCase();
+          let show = false;
+          if (filter === "all") {
+            show = true;
+          } else if (filter === "ctf") {
+            show = caseId.startsWith("CTF-");
+          } else if (filter === "learning path") {
+            show = caseId.startsWith("LP-");
+          } else if (filter === "seminar") {
+            show = caseId.startsWith("SM-");
+          } else if (filter === "exams") {
+            show = caseId.startsWith("EXM-");
+          }
+          card.style.display = show ? "" : "none";
+        });
+      });
+    });
+  });
+</script>
+{% endif %} {% if page.collection_name == "writeups" %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabs = document.querySelectorAll(".tabs .tab");
+    const cards = document.querySelectorAll(".cards-grid .card");
+    if (!tabs.length || !cards.length) return;
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", function () {
+        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        const filter = tab.textContent.trim().toLowerCase();
+        cards.forEach((card) => {
+          const type = card.dataset.type || "writeup";
+          let show = false;
+          if (filter === "all") {
+            show = true;
+          } else if (filter === "writeups" && type === "writeup") {
+            show = true;
+          } else if (filter === "notes" && type === "note") {
+            show = true;
+          }
+          card.style.display = show ? "" : "none";
+        });
+      });
+    });
+  });
+</script>
+{% endif %}

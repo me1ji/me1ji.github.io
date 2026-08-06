@@ -1,0 +1,104 @@
+---
+layout: default
+title: Home
+page_tag: "Subject Profile · Open Case"
+permalink: /
+---
+
+<section class="hero">
+  <div>
+    <span class="page-tag">About me:</span>
+    <p>
+      Hello! I'm Mark James, but you can call me Meiji. I am an aspiring Information Technology student at New Era University, specializing in cybersecurity with a focus on Blue Teaming.
+      <br><br>
+      My journey into cybersecurity began late last year when I was chosen to compete in Hack4Gov (H4G). Although our team did not win or place highly, the experience became a major catalyst for me. I quickly fell in love with the field. 
+      <br><br>
+      Outside of tech, I enjoy reading manga and books, as well as building model kits.
+    </p>
+    <div class="hero-tags">
+      <span>Blue Team</span>
+      <span>Digital Forensics</span>
+      <span>OSINT</span>
+    </div>
+  </div>
+  <div class="folder-card">
+    <dl>
+      <dt>Subject</dt>
+      <dd>Mark James D. Gonzales</dd>
+      <dt>Alias</dt>
+      <dd>Meiji</dd>
+      <dt>Team</dt>
+      <dd>Neutron</dd>
+      <dt>Focus</dt>
+      <dd>Defensive Security / OSINT</dd>
+      <dt>Status</dt>
+      <dd style="color: #2f7d4f">ACTIVE — Competing</dd>
+    </dl>
+  </div>
+</section>
+
+<div class="section-head">
+  <h2>Where to start</h2>
+  <div class="rule"></div>
+</div>
+
+<div class="cards-grid">
+  <a class="quick-card clickable" href="{{ site.baseurl }}/projects">
+    <span class="meta">01 · Builds & Engagements</span>
+    <h3>Projects</h3>
+    <p>
+      Learning and Exploring mew things through hands on projects.
+    </p>
+    <span class="open-hint">Open projects →</span>
+  </a>
+  <a class="quick-card clickable" href="{{ site.baseurl }}/challenges">
+    <span class="meta">02 · Self-Authored</span>
+    <h3>Challenges</h3>
+    <p>
+      Byte sized challenges I've built to have fun and apply security concepts I have learned.
+    </p>
+    <span class="open-hint">Open challenges →</span>
+  </a>
+  <a class="quick-card clickable" href="{{ site.baseurl }}/writeups">
+    <span class="meta">03 · Notes & Write-ups</span>
+    <h3>Writeups</h3>
+    <p>
+      Notes and Write-ups from my reviewers, reflections, competitions, and other random stuff.
+    </p>
+    <span class="open-hint">Open writeups →</span>
+  </a>
+  <a class="quick-card clickable" href="{{ site.baseurl }}/certificates">
+    <span class="meta">04 · Credentials</span>
+    <h3>Certificates</h3>
+    <p>
+    A collection of certifications and achievements that shows my continuous growth.
+    </p>
+    <span class="open-hint">Open certificates →</span>
+  </a>
+  <a class="quick-card clickable" href="{{ site.baseurl }}/contact">
+    <span class="meta">05 · Let's Collab</span>
+    <h3>Contact</h3>
+    <p>
+     Interested in working together? Let's grab a digital coffee and discuss.
+    </p>
+    <span class="open-hint">Open contact →</span>
+  </a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document
+      .querySelectorAll(".cards-grid .card.clickable")
+      .forEach((card) => {
+        card.addEventListener("click", function (event) {
+          let target = event.target;
+          while (target && target.nodeType !== 1) {
+            target = target.parentNode;
+          }
+          if (target && target.closest && target.closest("a")) return;
+          const link = card.querySelector("a.open-hint, a.resume-btn");
+          if (link) window.location.href = link.href;
+        });
+      });
+  });
+</script>

@@ -1,0 +1,90 @@
+# Jekyll Configuration
+# For more information, see: https://jekyllrb.com/docs/configuration/
+
+title: Meiji — Case Files
+description: Cybersecurity portfolio — projects, challenges, writeups, and certifications
+author: Meiji
+email: markjamesgonzales99@gmail.com
+baseurl: ""
+url: "https://yourdomain.com"
+lang: en
+
+# Build settings
+theme: null
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Collections
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+  challenges:
+    output: true
+    permalink: /challenges/:name/
+  writeups:
+    output: true
+    permalink: /writeups/:name/
+  certificates:
+    output: true
+    permalink: /certificates/:name/
+
+# Defaults
+defaults:
+  # All pages
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+  # Projects collection
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "collection-item"
+  # Challenges collection
+  - scope:
+      path: ""
+      type: "challenges"
+    values:
+      layout: "challenge-item"
+  # Writeups collection
+  - scope:
+      path: ""
+      type: "writeups"
+    values:
+      layout: "collection-item"
+  # Certificates collection
+  - scope:
+      path: ""
+      type: "certificates"
+    values:
+      layout: "collection-item"
+
+# Exclude files/dirs
+exclude:
+  - .git/
+  - .gitignore
+  - JEKYLL_MIGRATION_DETAILS.md
+  - REFACTOR_PLAN.md
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+
+# Permalink structure
+permalink: /:title/
+
+# Markdown processor
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Site metadata
+site:
+  name: "MEIJI // CASE FILES"
+  tagline: "Investigation Dossier"
+  team: "Neutron CTF Team"
+  status: "ACTIVE — Competing"
+  focus: "Defensive Sec / Forensics"

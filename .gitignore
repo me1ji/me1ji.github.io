@@ -1,0 +1,73 @@
+.jekyll-cache/
+_site/
+.sass-cache/
+.jekyll-metadata
+
+# Bundler / Gems
+.bundle/
+vendor/bundle/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Virtual machines and archives
+*.vdi
+*.vbox
+*.vbox-prev
+*.ova
+.vagrant/
+
+# Environment / secrets
+.env
+.env.*
+secrets.yml
+_credentials.yml
+
+# Logs
+*.log
+
+# Keep CNAME if you use a custom domain (uncomment to ensure it's tracked)
+#!CNAME
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+
+# Ruby
+.bundle/
+vendor/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Project specific
+node_modules/
+*.log
+.env
+.env.local
+
+# Build artifacts
+dist/
+build/
+
+# Migration planning docs (keep locally, don't commit)
+REFACTOR_PLAN.md
+JEKYLL_MIGRATION_DETAILS.md
