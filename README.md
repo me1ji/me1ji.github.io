@@ -4,7 +4,7 @@ My e-portfolio built with **Jekyll** on GitHub Pages. Content is managed through
 
 Design was made by claude
 
-**Live Site:** `https://yourusername.github.io/me1ji` (update after deploying)
+**Live Site:** `https://me1ji.github.io/`
 
 ## Quick Start
 
