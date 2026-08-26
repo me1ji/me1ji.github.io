@@ -13,7 +13,7 @@ permalink: /
       <br><br>
       My journey into cybersecurity began late last year when I was chosen to compete in Hack4Gov (H4G). Although our team did not win or place highly, the experience became a major catalyst for me. I quickly fell in love with the field. 
       <br><br>
-      Outside of tech, I enjoy reading manga and books, as well as building model kits.
+      Outside of tech, I enjoy reading manga and books, as well as _p2Tr4ve1 building model kits.
     </p>
     <div class="hero-tags">
       <span>Blue Team</span>
